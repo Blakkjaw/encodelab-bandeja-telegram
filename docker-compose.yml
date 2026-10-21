@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: encodelabs-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+
+  mongodb:
+    image: mongo:latest
+    container_name: encodelabs-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-example}
+
+  backend:
+    build:
+      context: ./src/backend
+      dockerfile: Dockerfile
+    container_name: encodelabs-backend
+    ports:
+      - "5000:80"
+    environment:
+      - ConnectionStrings__MongoDB=mongodb://${MONGO_INITDB_ROOT_USERNAME:-root}:${MONGO_INITDB_ROOT_PASSWORD:-example}@mongodb:27017
+      - RabbitMQ__Host=rabbitmq
+      - Telegram__BotToken=${TELEGRAM_BOT_TOKEN}
+    depends_on:
+      - rabbitmq
+      - mongodb
+
+  frontend:
+    build:
+      context: ./src/frontend
+      dockerfile: Dockerfile
+    container_name: encodelabs-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
