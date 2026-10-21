@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit, ChangeDetectorRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as signalR from '@microsoft/signalr';
@@ -24,7 +24,7 @@ interface Chat {
   templateUrl: './app.html',
 })
 
-export class App {
+export class App implements OnInit{
   protected readonly title = signal('frontend');
   private hubConnection!: signalR.HubConnection;
 
@@ -40,6 +40,8 @@ export class App {
 
   selectedChat: Chat | null = this.chats[0];
   newMessageText: string = '';
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     // Conexión con el Hub de SignalR del backend .NET
@@ -78,6 +80,8 @@ export class App {
       if (this.selectedChat?.id !== chat.id) {
         chat.unreadCount++;
       }
+
+      this.cdr.detectChanges();
     });
   }
 

@@ -1,11 +1,11 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Copiar csproj y restaurar
+# Copiar el csproj y restaurar dependencias
 COPY *.csproj ./
 RUN dotnet restore
 
-# Copiar todo y compilar
+# Copiar el resto del código y compilar
 COPY . ./
 RUN dotnet publish -c Release -o /out
 

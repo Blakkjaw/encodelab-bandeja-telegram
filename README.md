@@ -26,7 +26,7 @@ RABBITMQ_DEFAULT_PASS: Password para RabbitMQ.
 ## Ejecución de la Solución
 
 Para levantar la totalidad de la infraestructura (API .NET, Cliente Angular, RabbitMQ, DB y tunnel ngrok):
-docker compose up -d --build
+`docker compose up -d --build`
 
 El script de inicialización registrará automáticamente el Webhook en Telegram utilizando la URL pública generada por ngrok.
 
