@@ -1,6 +1,6 @@
-    <div class="layout">
+<div class="layout">
       <aside class="sidebar">
-        <div class="header">Conversaciones Telegram</div>
+        <div class="header">Conversaciones Telegram (En Vivo)</div>
         <div class="chat-list">
           <div 
             *ngFor="let chat of chats" 
@@ -17,7 +17,7 @@
       </aside>
 
       <main class="chat-area" *ngIf="selectedChat">
-        <div class="header">Chat con {{ selectedChat.username }}</div>
+        <div class="header">Chat con {{ selectedChat.username }} (ChatId: {{ selectedChat.id }})</div>
         <div class="messages">
           <div 
             *ngFor="let msg of selectedChat.messages" 
@@ -32,7 +32,7 @@
             type="text" 
             [(ngModel)]="newMessageText" 
             (keyup.enter)="sendMessage()"
-            placeholder="Escriba su respuesta..." />
+            placeholder="Escriba su respuesta a Telegram..." />
           <button (click)="sendMessage()">Enviar</button>
         </div>
       </main>
